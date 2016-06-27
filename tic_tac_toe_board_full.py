@@ -1,7 +1,6 @@
 from random import randint
 from time import sleep
 
-broad_size = int(raw_input("Enter broad size: "))
 # init board
 db_list=[[0, 0, 0], [0, 0, 0], [0, 0, 0]]
 
@@ -42,10 +41,11 @@ def is_not_full_board():
     return False
 
 def who_is_won():
-    if db_list[0][0] + db_list[0][1] + db_list[0][2] == 3 or db_list[0][0] + db_list[1][0] + db_list[2][0] == 3 or db_list[0][0] + db_list[1][1] + db_list[1][2] == 3 or db_list[0][1] + db_list[1][1] + db_list[2][1] == 3 or db_list[0][2] + db_list[1][2] + db_list[2][2] == 3 or db_list[0][2] + db_list[1][1] + db_list[2][0] == 3 or db_list[1][0] + db_list[1][1] + db_list[1][2] == 3 or db_list[2][0] + db_list[2][1] + db_list[2][2] == 3:
+    global is_over
+    if db_list[0][0] + db_list[0][1] + db_list[0][2] == 3 or db_list[0][0] + db_list[1][0] + db_list[2][0] == 3 or db_list[0][0] + db_list[1][1] + db_list[2][2] == 3 or db_list[0][1] + db_list[1][1] + db_list[2][1] == 3 or db_list[0][2] + db_list[1][2] + db_list[2][2] == 3 or db_list[0][2] + db_list[1][1] + db_list[2][0] == 3 or db_list[1][0] + db_list[1][1] + db_list[1][2] == 3 or db_list[2][0] + db_list[2][1] + db_list[2][2] == 3:
         is_over = True
         return username + " is WON"
-    elif db_list[0][0] + db_list[0][1] + db_list[0][2] == -3 or db_list[0][0] + db_list[1][0] + db_list[2][0] == -3 or db_list[0][0] + db_list[1][1] + db_list[1][2] == -3 or db_list[0][1] + db_list[1][1] + db_list[2][1] == -3 or db_list[0][2] + db_list[1][2] + db_list[2][2] == -3 or db_list[0][2] + db_list[1][1] + db_list[2][0] == -3 or db_list[1][0] + db_list[1][1] + db_list[1][2] == -3 or db_list[2][0] + db_list[2][1] + db_list[2][2] == -3:
+    elif db_list[0][0] + db_list[0][1] + db_list[0][2] == -3 or db_list[0][0] + db_list[1][0] + db_list[2][0] == -3 or db_list[0][0] + db_list[1][1] + db_list[2][2] == -3 or db_list[0][1] + db_list[1][1] + db_list[2][1] == -3 or db_list[0][2] + db_list[1][2] + db_list[2][2] == -3 or db_list[0][2] + db_list[1][1] + db_list[2][0] == -3 or db_list[1][0] + db_list[1][1] + db_list[1][2] == -3 or db_list[2][0] + db_list[2][1] + db_list[2][2] == -3:
         is_over = True
         return computername + " is WON"
         
@@ -53,8 +53,8 @@ def who_is_won():
         if is_not_full_board():
             return "CONTINUE"
         else:
-            return "DRAW"
             is_over = True
+            return "DRAW"
 
 while not is_over:
     print_board()
@@ -62,8 +62,9 @@ while not is_over:
     sleep(2)
     user_move(1)
     print who_is_won()
+    if is_over:
+        break
     computer_move(-1)
     print who_is_won()
-
-
-
+    if is_over:
+        break
