@@ -1,0 +1,22 @@
+<!doctype hml>
+{% block body %}
+ {% for message in get_flashed_messages() %}
+        <h1>{{ message }}</h1>
+ {% endfor %}
+
+ <form action="{{ url_for('create_user') }}" method="post">
+        <dl>
+            <dt>UserName:
+            <dd><input type="text" size=30 name="user_name">
+            <dt>Password:
+            <dd><input type="password" name="password" size="30">
+            <dt>FirstName:
+            <dd><input type="text" name="first_name" size="30">
+            <dt>LastName:
+            <dd><input type="text" name="last_name" size="30">
+            <dt>Email:
+            <dd><input type="text" name="email" size="30">
+            <dd><input type="submit" value="Create User">
+        </dl>
+    </form>
+{% endblock %}

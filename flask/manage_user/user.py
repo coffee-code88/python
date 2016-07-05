@@ -8,15 +8,75 @@ app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 
 def connect_db():
     db = my.connect("localhost","root","password","test")
+    return db
+
+@app.route("/user/list")
+def list_user():
+    db = connect_db()
     cursor = db.cursor(my.cursors.DictCursor) 
-    return cursor
-
-@app.route("/")
-def show_user():
-    cursor = connect_db()
     cursor.execute("select user_name, password, email, first_name, last_name from user order by user_id desc")
-    user=cursor.fetchall()
-    print user
-    return render_template("show_user.html", users=user)
+    users=cursor.fetchall()
+    db.close()
+    return render_template("list_user.html", users=users)
 
+@app.route("/user/create/getForm")
+def get_create_user_form():
+    return render_template("create_user_form.html")
 
+@app.route("/user/create", methods=['POST'])
+def create_user():
+    user_name = request.form['user_name']
+    password = request.form['password']
+    email = request.form['email']
+    first_name = request.form['first_name']
+    last_name = request.form['last_name']
+    print "DEBUG: username=%s, password=%s, email=%s, firstname=%s, lastname=%s" % (user_name, password, email, first_name, last_name)
+    type(user_name)
+    type(password)
+    type(first_name)
+    type(last_name)
+    type(email)
+    params=[user_name, password, email, first_name, last_name]
+    db = connect_db()
+    cursor = db.cursor()
+    cursor.execute("INSERT INTO user(user_name, password, email, first_name, last_name) values(%s, %s, %s, %s, %s)", params)
+    db.commit()
+    db.close()
+    #flash("New user created successfully")
+    return redirect(url_for('get_create_user_form'))
+
+@app.route("/user/delete/<int:user_id>")
+def delete_user(user_id):
+    sql = """delete from user where user_id=%s"""
+    db = connect_db()
+    cursor = db.cursor()
+    cursor.execute(sql, (user_id))
+    db.commit()
+    db.close()
+    #flash("Delete user successfully")
+    return redirect(url_for('get_create_user_form'))
+
+@app.route("/user/get/<int:user_id>")
+def get_user(user_id):
+    sql = """select user_id, user_name, first_name, last_name, email from user where user_id=%s"""
+    db = connect_db()
+    cursor = db.cursor(my.cursors.DictCursor)
+    cursor.execute(sql, (user_id))
+    user = cursor.fetchone()
+    db.close()
+    return render_template("get_user.html", user=user)
+
+@app.route("/user/edit/<int:user_id>", methods=['POST'])
+def edit_user(user_id):
+    sql = """update user set user_name=%s, first_name=%s, last_name=%s, email=%s where user_id=%s"""
+    user_name = request.form['user_name']
+    email = request.form['email']
+    first_name = request.form['first_name']
+    last_name = request.form['last_name']
+    db = connect_db()
+    cursor = db.cursor()
+    cursor.execute(sql, [user_name, first_name, last_name, email, user_id])
+    db.commit()
+    db.close()
+    #flash("Edit user successfully")
+    return redirect(url_for('get_user', user_id=user_id))

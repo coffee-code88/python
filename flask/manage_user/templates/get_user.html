@@ -1,0 +1,26 @@
+<!doctype hml>
+{% block body %}
+ {% for message in get_flashed_messages() %}
+        <h1>{{ message }}</h1>
+ {% endfor %}
+
+{% if user %}
+ <form action="{{ url_for('edit_user', user_id=user.user_id) }}" method="post">
+        <dl>
+            <dt>UserName:
+            <dd><input type="text" size=30 name="user_name" value={{ user.user_name }}>
+            <dt>FirstName:
+            <dd><input type="text" name="first_name" size="30" value={{ user.first_name }}>
+            <dt>LastName:
+            <dd><input type="text" name="last_name" size="30" value={{ user.last_name }} >
+            <dt>Email:
+            <dd><input type="text" name="email" size="30" value={{ user.email }}>
+            <dd><input type="submit" value="Edit User">
+        </dl>
+    </form>
+{% else %}
+<h3>
+	NO user
+</h3>
+{% endif %}
+{% endblock %}
