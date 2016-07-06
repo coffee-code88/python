@@ -1,22 +1,33 @@
-<!doctype hml>
+{% extends "layout.html" %}
 {% block body %}
+
  {% for message in get_flashed_messages() %}
         <h1>{{ message }}</h1>
  {% endfor %}
-
- <form action="{{ url_for('create_user') }}" method="post">
-        <dl>
-            <dt>UserName:
-            <dd><input type="text" size=30 name="user_name">
-            <dt>Password:
-            <dd><input type="password" name="password" size="30">
-            <dt>FirstName:
-            <dd><input type="text" name="first_name" size="30">
-            <dt>LastName:
-            <dd><input type="text" name="last_name" size="30">
-            <dt>Email:
-            <dd><input type="text" name="email" size="30">
-            <dd><input type="submit" value="Create User">
-        </dl>
+<h2>CREATE NEW USER</h2>
+<div class="container">
+ <form  role="form" action="{{ url_for('create_user') }}" method="post">
+        <div class="form-group">
+            <label for="user_name">UserName:</label>
+            <input type="text" class="form-control" size=30 name="user_name" id="user_name" placeholder="Enter username">
+	</div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" class="form-control" name="password" size="30" id="password" placeholder="Enter password">
+	</div>
+        <div class="form-group">
+            <label for="first_name">FirstName:</label>
+            <input type="text" class="form-control" name="first_name" size="30" id="first_name" placeholder="Enter first name">
+	</div>
+        <div class="form-group">
+            <label for="last_name">LastName:</label>
+            <input type="text" class="form-control" name="last_name" size="30" id="last_name" placeholder="Enter last name">
+	</div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" name="email" size="30" id="email" placeholder="Enter email">
+	</div>
+            <button type="submit" class="btn btn-default">Create User</button>
     </form>
+</div>
 {% endblock %}
