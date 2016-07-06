@@ -50,6 +50,7 @@ Vagrant.configure(2) do |config|
      echo "==============Install rabbitmq"
      wget -O /tmp/erlang.rpm https://packages.erlang-solutions.com/erlang-solutions-1.0-1.noarch.rpm &> /dev/null
      sudo rpm -ivh /tmp/erlang.rpm
+     sudo yum -y install erlang
      wget -O /tmp/rabbitmq.rpm https://www.rabbitmq.com/releases/rabbitmq-server/v3.6.2/rabbitmq-server-3.6.2-1.noarch.rpm &> /dev/null
      sudo rpm --import https://www.rabbitmq.com/rabbitmq-release-signing-key.asc
      sudo rpm -ivh /tmp/rabbitmq.rpm
