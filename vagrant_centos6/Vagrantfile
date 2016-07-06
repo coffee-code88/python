@@ -1,0 +1,58 @@
+Vagrant.configure(2) do |config|
+  config.vm.box = "bento/centos-6.7"
+  config.vm.hostname = "coding-server"
+  config.vm.network "private_network", ip: "192.168.17.7"
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.name = "centos-6.7"
+    vb.gui = false
+    vb.memory = 1024
+    vb.cpus = 1
+  end
+
+  config.vm.provision "shell", inline: <<-SHELL
+     echo "Update yum"
+     sudo yum -y update
+
+     echo "==============Install epel repo"
+     wget -O /tmp/epel.rpm https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm &> /dev/null
+     sudo rpm -ivh /tmp/epel.rpm
+
+     echo "==============Install remi repo"
+     wget -O /tmp/remi.rpm http://rpms.famillecollet.com/enterprise/remi-release-6.rpm &> /dev/null
+     sudo rpm -ivh /tmp/remi.rpm
+
+     echo "Applying new repo..."
+     sudo yum clean all
+      
+     echo "==============Install package"
+     sudo yum -y install git atop htop tcpdump nmap socat gcc gcc-c++ make telnet
+
+     echo "==============Install nginx 1.10"
+     sudo cp /vagrant/provision/nginx.repo /etc/yum.repos.d/nginx.repo
+     sudo yum -y install nginx
+
+     echo "==============Install mysql community 5.7"
+     wget -O /tmp/mysql57-community.rpm https://dev.mysql.com/get/mysql57-community-release-el6-8.noarch.rpm &> /dev/null
+     sudo rpm -ivh /tmp/mysql57-community.rpm
+     sudo yum -y install mysql-community-server  
+
+     echo "==============Install mongodb 3.2"
+     sudo cp /vagrant/provision/mongodb.repo /etc/yum.repos.d/mongodb.repo
+     sudo yum -y install mongodb-org
+
+     echo "==============Install memcached"
+     sudo yum -y install --enablerepo=remi memcached
+
+     echo "==============Install redis"
+     sudo yum -y install --enablerepo=remi redis
+     
+     echo "==============Install rabbitmq"
+     wget -O /tmp/erlang.rpm https://packages.erlang-solutions.com/erlang-solutions-1.0-1.noarch.rpm &> /dev/null
+     sudo rpm -ivh /tmp/erlang.rpm
+     wget -O /tmp/rabbitmq.rpm https://www.rabbitmq.com/releases/rabbitmq-server/v3.6.2/rabbitmq-server-3.6.2-1.noarch.rpm &> /dev/null
+     sudo rpm --import https://www.rabbitmq.com/rabbitmq-release-signing-key.asc
+     sudo rpm -ivh /tmp/rabbitmq.rpm
+     
+  SHELL
+end
