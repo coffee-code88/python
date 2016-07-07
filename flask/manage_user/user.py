@@ -80,3 +80,11 @@ def edit_user(user_id):
     db.close()
     #flash("Edit user successfully")
     return redirect(url_for('get_user', user_id=user_id))
+
+@app.route("/index")
+def index():
+    return render_template("index.html")
+
+with app.test_request_context():
+    print url_for('index')
+    print url_for('get_user', user_id='123')
