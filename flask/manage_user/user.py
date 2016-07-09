@@ -1,6 +1,6 @@
 import os
 import MySQLdb as my
-from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
+from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash, jsonify
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -14,10 +14,10 @@ def connect_db():
 def list_user():
     db = connect_db()
     cursor = db.cursor(my.cursors.DictCursor) 
-    cursor.execute("select user_name, password, email, first_name, last_name from user order by user_id desc")
+    cursor.execute("select user_id, user_name, password, email, first_name, last_name from user order by user_id desc")
     users=cursor.fetchall()
     db.close()
-    return render_template("list_user.html", users=users)
+    return render_template("table_user.html", users=users)
 
 @app.route("/user/create/getForm")
 def get_create_user_form():
@@ -43,10 +43,14 @@ def create_user():
     db.commit()
     db.close()
     #flash("New user created successfully")
-    return redirect(url_for('get_create_user_form'))
+    response={"result": "New User Created Successfully"}
+   # return redirect(url_for('get_create_user_form'))
+    return jsonify(response)
 
-@app.route("/user/delete/<int:user_id>")
-def delete_user(user_id):
+@app.route("/user/delete/")
+def delete_user():
+    user_id=request.args.get("user_id")
+    print "user_id=%s" % user_id
     sql = """delete from user where user_id=%s"""
     db = connect_db()
     cursor = db.cursor()
@@ -54,7 +58,7 @@ def delete_user(user_id):
     db.commit()
     db.close()
     #flash("Delete user successfully")
-    return redirect(url_for('get_create_user_form'))
+    return jsonify({"result": "Delete user Successfully"})
 
 @app.route("/user/get/<int:user_id>")
 def get_user(user_id):

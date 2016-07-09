@@ -30,9 +30,18 @@
     </form>
 </div>
 <script>
+    console.log("abc");
     $("form").submit(function(e){
         e.preventDefault()
-        console.log("click here") 
+        $.ajax({
+            dataType: "json",
+            type: "POST",
+            url: "{{ url_for('create_user') }}",
+            data: $("form").serialize(),
+            success: function(response){
+                $("#result").removeClass().show().attr("class","alert alert-success").html(response.result).fadeOut(5000);
+            }
+        })
     }); 
 </script>
 {% endblock %}
