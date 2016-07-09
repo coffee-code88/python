@@ -60,8 +60,9 @@ def delete_user():
     #flash("Delete user successfully")
     return jsonify({"result": "Delete user Successfully"})
 
-@app.route("/user/get/<int:user_id>")
-def get_user(user_id):
+@app.route("/user/get/")
+def get_user():
+    user_id = request.args.get("user_id")
     sql = """select user_id, user_name, first_name, last_name, email from user where user_id=%s"""
     db = connect_db()
     cursor = db.cursor(my.cursors.DictCursor)
@@ -83,7 +84,8 @@ def edit_user(user_id):
     db.commit()
     db.close()
     #flash("Edit user successfully")
-    return redirect(url_for('get_user', user_id=user_id))
+#    return redirect(url_for('get_user', user_id=user_id))
+    return jsonify({"result": "Update user Successfully"})
 
 @app.route("/index/")
 def index():

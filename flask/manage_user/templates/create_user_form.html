@@ -5,7 +5,7 @@
  {% endfor %}
 <h2>CREATE NEW USER</h2>
 <div class="container">
- <form  role="form" action="{{ url_for('create_user') }}" method="post">
+ <form id="create_form" role="form" action="{{ url_for('create_user') }}" method="post">
         <div class="form-group">
             <label for="user_name">UserName:</label>
             <input type="text" class="form-control" size=30 name="user_name" id="user_name" placeholder="Enter username">
@@ -30,8 +30,7 @@
     </form>
 </div>
 <script>
-    console.log("abc");
-    $("form").submit(function(e){
+    $("#create_form").submit(function(e){
         e.preventDefault()
         $.ajax({
             dataType: "json",
