@@ -10,7 +10,7 @@ def connect_db():
     db = my.connect("localhost","root","password","test")
     return db
 
-@app.route("/user/list")
+@app.route("/user/list/")
 def list_user():
     db = connect_db()
     cursor = db.cursor(my.cursors.DictCursor) 
@@ -19,11 +19,11 @@ def list_user():
     db.close()
     return render_template("table_user.html", users=users)
 
-@app.route("/user/create/getForm")
+@app.route("/user/create/getForm/")
 def get_create_user_form():
     return render_template("create_user_form.html")
 
-@app.route("/user/create", methods=['POST'])
+@app.route("/user/create/", methods=['POST'])
 def create_user():
     user_name = request.form['user_name']
     password = request.form['password']
@@ -85,7 +85,7 @@ def edit_user(user_id):
     #flash("Edit user successfully")
     return redirect(url_for('get_user', user_id=user_id))
 
-@app.route("/index")
+@app.route("/index/")
 def index():
     return render_template("index.html")
 
