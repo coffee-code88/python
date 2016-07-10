@@ -4,7 +4,6 @@
         <h1>{{ message }}</h1>
  {% endfor %}
 <h2>CREATE NEW USER</h2>
-<div class="container">
  <form id="create_form" role="form" action="{{ url_for('create_user') }}" method="post">
         <div class="form-group">
             <label for="user_name">UserName:</label>
@@ -28,7 +27,6 @@
 	</div>
             <button type="submit" class="btn btn-default">Create User</button>
     </form>
-</div>
 <script>
     $("#create_form").submit(function(e){
         e.preventDefault()
